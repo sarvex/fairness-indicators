@@ -88,8 +88,8 @@ def convert_comments_data(input_filename, output_filename=None):
     return _convert_comments_data_csv(input_filename, output_filename)
 
   raise ValueError(
-      'input_filename must have supported file extension csv or tfrecord, '
-      'given: {}'.format(input_filename))
+      f'input_filename must have supported file extension csv or tfrecord, given: {input_filename}'
+  )
 
 
 def _convert_comments_data_tfrecord(input_filename, output_filename=None):
@@ -109,12 +109,11 @@ def _convert_comments_data_tfrecord(input_filename, output_filename=None):
           else 0)
 
       for identity_category, identity_list in IDENTITY_COLUMNS.items():
-        grouped_identity = []
-        for identity in identity_list:
-          if (example.features.feature[identity].float_list.value and
-              example.features.feature[identity].float_list.value[0] >=
-              _THRESHOLD):
-            grouped_identity.append(identity.encode())
+        grouped_identity = [
+            identity.encode() for identity in identity_list
+            if (example.features.feature[identity].float_list.value and example
+                .features.feature[identity].float_list.value[0] >= _THRESHOLD)
+        ]
         new_example.features.feature[identity_category].bytes_list.value.extend(
             grouped_identity)
       writer.write(new_example.SerializeToString())

@@ -130,8 +130,7 @@ class FairnessIndicatorsPlugin(base_plugin.TBPlugin):
     return http_util.Respond(request, data, content_type='application/json')
 
   def _get_output_file_format(self, evaluation_output_path):
-    file_format = os.path.splitext(evaluation_output_path)[1]
-    if file_format:
+    if file_format := os.path.splitext(evaluation_output_path)[1]:
       return file_format[1:]
 
     return ''

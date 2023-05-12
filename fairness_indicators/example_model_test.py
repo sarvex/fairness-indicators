@@ -61,8 +61,7 @@ class ExampleModelTest(tf.test.TestCase):
     return example
 
   def _create_data(self):
-    examples = []
-    examples.append(self._create_example('test comment', 0.0, 'slice1'))
+    examples = [self._create_example('test comment', 0.0, 'slice1')]
     examples.append(self._create_example('toxic comment', 1.0, 'slice1'))
     examples.append(self._create_example('non-toxic comment', 0.0, 'slice1'))
     examples.append(self._create_example('test comment', 1.0, 'slice2'))

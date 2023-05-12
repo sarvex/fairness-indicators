@@ -56,16 +56,14 @@ def _get_metric_value(
       passed.
   """
   for value in nested_dict.values():
-    if metric_name in value['']:
-      typed_value = value[''][metric_name]
-      if 'doubleValue' in typed_value:
-        return typed_value['doubleValue']
-      if 'boundedValue' in typed_value:
-        return typed_value['boundedValue']['value']
-      raise TypeError('Unsupported value type: %s' % typed_value)
-    else:
-      raise KeyError('Key %s not found in %s' %
-                     (metric_name, list(value[''].keys())))
+    if metric_name not in value['']:
+      raise KeyError(f"Key {metric_name} not found in {list(value[''].keys())}")
+    typed_value = value[''][metric_name]
+    if 'doubleValue' in typed_value:
+      return typed_value['doubleValue']
+    if 'boundedValue' in typed_value:
+      return typed_value['boundedValue']['value']
+    raise TypeError(f'Unsupported value type: {typed_value}')
   raise KeyError(
       'Unable to return a metric value because the dictionary passed is empty.')
 
@@ -92,5 +90,5 @@ def get_baseline_value(
       return _get_metric_value(metrics_tuple[1], metric_name)
     if baseline_name == slice_tuple:
       return _get_metric_value(metrics_tuple[1], metric_name)
-  raise ValueError('Could not find baseline %s in eval_result: %s' %
-                   (baseline_name, eval_result))
+  raise ValueError(
+      f'Could not find baseline {baseline_name} in eval_result: {eval_result}')
